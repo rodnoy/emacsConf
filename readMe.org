@@ -1,0 +1,192 @@
+#+title: init.el or basic emacs configuration
+#+author: Kirill SIMAGIN
+
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="/Users/kirillsimagin/Documents/notes/css/org3.css" />
+* My emacs configuration: explained
+  Basically, I'm going to write about the init configuration file.
+  The file can be found at the *~/.emacs.d/init.el*.
+
+** aspell
+
+In order to install ~aspell~, we should launch in terminal *homebrew*,
+like this => ~brew install aspell~
+
+#+begin_src emacs-lisp
+
+  (setq ispell-program-name "aspell")
+  (add-to-list 'exec-path "/usr/local/bin")
+
+  (define-globalized-minor-mode my-global-flyspell-mode
+  flyspell-mode
+    (lambda () (flyspell-mode 1)))
+
+  (my-global-flyspell-mode 1)
+
+#+end_src
+
+** Hide tutorial screen
+
+To hide standard tutorial screen (Welcome *emacs*), just use the line below.
+
+#+begin_src emacs-lisp
+  (setq inhibit-startup-message t)
+#+end_src
+
+** Set aka writeroom-mode for Orgmode
+
+To center text, limit length, we need to install a package, called 
+*visual-fill-column*. It has a couple of settings.
+
+#+begin_src emacs-lisp
+
+  (defun efs/org-mode-visual-fill ()
+    (setq visual-fill-column-width 100
+	  visual-fill-column-center-text t)
+    (visual-fill-column-mode 1))
+
+
+  (use-package visual-fill-column
+    :hook (org-mode . efs/org-mode-visual-fill))
+
+
+
+#+end_src
+
+** Remove line numbers
+In order to remove line numbers for some modes we should do:
+
+#+begin_src emacs-lisp
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook term-mode-hook shell-mode-hook
+		  treemacs-mode-hook eshell-mode-hook gfm-mode-hook))
+		  (add-hook mode (lambda () (display-line-numbers-mode
+		  0))))
+
+#+end_src
+
+
+** Disable backups
+
+#+begin_src emacs-lisp
+  (setq make-backup-files nil)
+#+end_src
+
+** disable emacs's #autosave#
+
+#+begin_src emacs-lisp
+  (setq make-backup-files nil)
+#+end_src
+
+** show line numbers
+
+#+begin_src emacs-lisp
+
+  (global-display-line-numbers-mode t)
+
+#+end_src
+
+** Disable the toolbar and the tabbar
+
+#+begin_src emacs-lisp
+(tool-bar-mode -1)          ; Disable the toolbar
+
+(menu-bar-mode -1)          ; Disable tabbar
+#+end_src
+
+
+** Org mode configuration
+
+#+begin_src emacs-lisp
+;; use org package
+
+(use-package org)
+
+#+end_src
+
+In order to customize Org emphasis colors, the *org-emphasis-alist* must be overridden
+
+#+begin_src emacs-lisp
+  (setq org-emphasis-alist '(("*" (bold :foreground "#00b295" )) ("/"
+	     (italic :foreground "#bce7fd")) ("_" underline) ("=" (:background "#c492b1"
+	     :foreground "black")) ("~" (:background "#dbbadd"
+	     :foreground "black")) ("+" (:strike-through t))))
+
+#+end_src
+
+** Markdown support
+
+I use markdown mode. The full description can be found [[https://github.com/jrblevin/markdown-mode-guide/blob/master/manuscript/guide.txt][here]] and some [[https://github.com/jrblevin/markdown-mode-guide/blob/master/extra/refcard.tex][keybindings]] [ at line *99* ].
+This configuration [[https://blog.bitsandbobs.net/blog/emacs-markdown-live-preview/][described here]] I used in the *init.el*.
+
+#+begin_src emacs-lisp
+  ;; add markdown mode
+
+  (use-package markdown-mode
+    :ensure t
+    :mode ("\\.md\\'" . gfm-mode)
+    :commands (markdown-mode gfm-mode)
+    :config
+    (setq markdown-command "pandoc -t html5"))
+
+  ;; preview
+
+  (use-package simple-httpd
+    :ensure t
+    :config
+    (setq httpd-port 7070)
+    (setq httpd-host (system-name)))
+
+  (use-package impatient-mode
+    :ensure t
+    :commands impatient-mode)
+
+
+  (defun my-markdown-filter (buffer)
+    (princ
+     (with-temp-buffer
+       (let ((tmp (buffer-name)))
+	 (set-buffer buffer)
+	 (set-buffer (markdown tmp))
+	 (format "<!DOCTYPE html><html><title>Markdown
+  preview</title><link rel=\"stylesheet\" href =
+  \"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css\"/>
+  <body><article class=\"markdown-body\" style=\"box-sizing:
+  border-box;min-width: 200px;max-width: 980px;margin: 0
+  auto;padding:
+  45px;\">%s</article></body></html>" (buffer-string))))
+     (current-buffer)))
+
+  (defun my-markdown-preview ()
+    "Preview markdown."
+    (interactive)
+    (unless (process-status "httpd")
+      (httpd-start))
+    (impatient-mode)
+    (imp-set-user-filter 'my-markdown-filter)
+    (imp-visit-buffer))
+
+#+end_src
+
+** Fonts
+
+#+begin_src emacs-lisp
+(defvar kirill/default-font-size 180)
+(defvar kirill/default-variable-font-size 180)
+
+(set-face-attribute 'default nil :font "Fira Code Retina" :height kirill/default-font-size)
+
+;; Set the fixed pitch face
+(set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height kirill/default-font-size)
+
+;; Set the variable pitch face
+(set-face-attribute 'variable-pitch nil :font "Cantarell" :height kirill/default-variable-font-size :weight 'regular)
+
+#+end_src
+
+** Custom keys / shortcuts
+
+#+begin_src emacs-lisp
+  ;; custom key settings
+  (global-set-key (kbd "C-c ;") 'comment-line)
+  (global-set-key (kbd "C-c SPC") 'set-mark-command)
+#+end_src
