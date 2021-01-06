@@ -168,6 +168,8 @@ This configuration [[https://blog.bitsandbobs.net/blog/emacs-markdown-live-previ
 #+end_src
 
 ** Fonts
+Important ! I found, that on my mac the ~Fira Code Retina~ doesn't
+work so just use *Fira Code* instead
 
 #+begin_src emacs-lisp
 (defvar kirill/default-font-size 180)
@@ -183,6 +185,10 @@ This configuration [[https://blog.bitsandbobs.net/blog/emacs-markdown-live-previ
 
 #+end_src
 
+To debug or just find out the current *font* used in the *emacs* (it's
+also called *faces*). Use the command: ~M-x describe-font~, but this
+command doesn't work properly in my config, so I use ~m-x describe-face ret~.
+By the way, to find ASCII code of the letter or character ~M-x describe-char~.
 ** Custom keys / shortcuts
 
 #+begin_src emacs-lisp
