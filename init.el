@@ -35,7 +35,8 @@
 
 (use-package visual-fill-column
   :hook (org-mode . kirill/org-mode-visual-fill)
-  :hook (gfm-mode . kirill/org-mode-visual-fill))
+  :hook (gfm-mode . kirill/org-mode-visual-fill)
+  :hook (markdown-mode . kirill/org-mode-visual-fill))
 
 
 ;; curl -L https://iterm2.com/misc/install_shell_integration_and_utilities.sh | bash
@@ -55,7 +56,8 @@
 
 ;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook term-mode-hook shell-mode-hook
-                treemacs-mode-hook eshell-mode-hook gfm-mode-hook))
+                treemacs-mode-hook eshell-mode-hook gfm-mode-hook
+                markdown-mode-hook))
                 (add-hook mode (lambda () (display-line-numbers-mode
                 0))))
 
@@ -241,36 +243,28 @@
 (defvar kirill/default-font-size 180)
 (defvar kirill/default-variable-font-size 180)
 
-(set-face-attribute 'default nil :font "Fira Code Retina" :height kirill/default-font-size)
+;; (custom-set-faces
+ ;; '(default ((t (:inherit nil :extend nil :stipple nil :background "#121212" :foreground "#CCEEEE" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 180 :width normal :foundry "default" :family "MonaLisa Regular")))))
+;; (add-to-list 'default-frame-alist '(font . "Arial" ))
+;; (set-face-attribute 'default t :font "Arial" :height 180)
+;; (set-face-attribute 'default nil :font "Fira Code Retina 18" )
+;(set-frame-font "Fira Code 15" nil t)
+
+(set-face-attribute 'default nil :font "Fira Code" :height kirill/default-font-size)
 
 ;; Set the fixed pitch face
-(set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height kirill/default-font-size)
+(set-face-attribute 'fixed-pitch nil :font "Fira Code" :height kirill/default-font-size)
 
 ;; Set the variable pitch face
 (set-face-attribute 'variable-pitch nil :font "Cantarell" :height kirill/default-variable-font-size :weight 'regular)
-
-;; (custom-set-faces
-;;  '(default ((t (:inherit nil :extend nil :stipple nil :background "#121212" :foreground "#CCEEEE" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 180 :width normal :foundry "default" :family "MonaLisa Regular")))))
-
-;; (custom-set-faces
-;;  '(default ((t (:inherit nil :extend nil :stipple nil :background "#121212" :foreground "#CCEEEE" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 180 :width normal :foundry "default" :family "Menlo")))))
 
 
 ;; custom key settings
 (global-set-key (kbd "C-c ;") 'comment-line)
 ;; set-mark-command,,
 (global-set-key (kbd "C-c SPC") 'set-mark-command)
-(global-set-key (kbd "S-s") 'kill-ring-save)
-;; command+shift+;
+
 ;; change how mark-up looks in emacs without modyfing exporting format
-
-
-;; (setq org-emphasis-alist '(("*" (bold :foreground "Orange" )) ("/"
-;; 	   italic) ("_" underline) ("=" (:background "maroon"
-;; 	   :foreground "white")) ("~" (:background "deep sky blue"
-;; 	   :foreground "MidnightBlue")) ("+" (:strike-through t))))
-
-
 
 (setq org-emphasis-alist '(("*" (bold :foreground "#00b295" )) ("/"
 	   (italic :foreground "#bce7fd")) ("_" underline) ("=" (:background "#c492b1"
