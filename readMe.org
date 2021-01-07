@@ -196,3 +196,18 @@ By the way, to find ASCII code of the letter or character ~M-x describe-char~.
   (global-set-key (kbd "C-c ;") 'comment-line)
   (global-set-key (kbd "C-c SPC") 'set-mark-command)
 #+end_src
+
+* Some notes
+** about aspell
+- to make it work on mac os should use standard *brew* command
+
+#+begin_src emacs-lisp
+  brew install aspell
+#+end_src
+
+then aspell lives in ~/usr/local/bin~
+
+- in order to make it work on ubuntu should use standard ~apt install
+  aspell-ru~ or ~apt install aspell-fr~
+
+On ubuntu aspell lives in ~/usr/bin~
