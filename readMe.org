@@ -195,7 +195,52 @@ By the way, to find ASCII code of the letter or character ~M-x describe-char~.
   ;; custom key settings
   (global-set-key (kbd "C-c ;") 'comment-line)
   (global-set-key (kbd "C-c SPC") 'set-mark-command)
+  (global-set-key (kbd "C-c C-f") 'recentf-open-files)
 #+end_src
+
+** Show list of recent files
+   In order to show recently opened files we should use
+
+#+begin_src emacs-lisp
+  ;; show recent files
+
+  (require 'recentf)
+  (recentf-mode 1)
+
+  (setq recentf-auto-cleanup 'never)
+#+end_src 
+
+** Buitiful linemode: updated Echo Area
+   
+#+begin_src emacs-lisp
+  (use-package all-the-icons)
+  ;; works on mac
+  (add-hook 'after-init-hook #'doom-modeline-mode)
+  (setq doom-modeline-height 25)
+  ;; works on linux
+  ;; (use-package doom-modeline
+  ;; :init (doom-modeline-mode 1)
+  ;; :custom ((doom-modeline-height 15)))
+#+end_src 
+
+** Set default directory
+
+#+begin_src emacs-lisp
+  ;; set default directory to open when type C-x C-f
+  (setq default-directory "~/Documents/notes")
+#+end_src
+
+** Abbrev config
+[[http://ergoemacs.org/emacs/emacs_abbrev_mode_tutorial.html][Tutorial to the abbrev mode]] I used to undersand how it works
+
+My config to activete always this mode
+#+begin_src emacs-lisp
+  ;; turn on abbrev mode globally
+  (setq-default abbrev-mode t)
+#+end_src 
+
+Currently there are some abbreviation for ex. *src* and just hit *SPC* after it. My abbrevation file
+can be found, like by default, at *~/.emacs.d/abbrev_defs*
 
 * Some notes
 ** about aspell
