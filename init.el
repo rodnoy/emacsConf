@@ -1,4 +1,5 @@
 ;; repositories and dependencies configuration
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
@@ -36,19 +37,24 @@
 
 ;; set spell correction
 
-(setq ispell-program-name "aspell")
-(add-to-list 'exec-path "/usr/local/bin/aspell")
+(setq ispell-program-name "/usr/local/bin/aspell")
+;; (add-to-list 'exec-path "/usr/local/bin/")
 
 ;; forbid to emacs to create back-up files like #file or ~file
 
 (setq make-backup-files nil)
 
+;; macOS keys binding
+
+(setq mac-option-key-is-meta t)
+(setq mac-right-option-modifier nil)
+;; (setq ns-right-alternate-modifier nil) ;; for aquamacs
 ;; display line numbers
 
 (global-display-line-numbers-mode t)
 
 ;; set default directory to open when type C-x C-f
-(setq default-directory "~/Documents/notes")
+;; (setq default-directory "~/Documents/notes")
 
 ;; disable line numbers for some modes
 (dolist (mode '(org-mode-hook term-mode-hook shell-mode-hook
@@ -61,10 +67,19 @@
 
 (tool-bar-mode -1)          ; disable the toolbar
 
-(menu-bar-mode -1)          ; disable tabbar
+(menu-bar-mode -1)          ; disable tab-bar
+
+;; going to install lsp-mode
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :hook (lsp-mode . efs/lsp-mode-setup)
+  :init
+  (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+  :config
+  (lsp-enable-which-key-integration t))
 
 ;; turn on abbrev mode globally
-(setq-default abbrev-mode t)
+;; (setq-default abbrev-mode t)
 ;; use org package
 
 (use-package org)
@@ -76,8 +91,9 @@
   :mode ("\\.md\\'" . gfm-mode)
   :commands (markdown-mode gfm-mode)
   :config
-  (setq markdown-command "pandoc -t html5"))
+  (setq markdown-command "/usr/local/bin/pandoc -t html5"))
 
+;; (setq markdown-command "/usr/local/bin/pandoc")
 ;; preview
 
 (use-package simple-httpd
@@ -140,7 +156,7 @@
 ;;i launch my macros file for each emacs document
 (load "~/documents/notes/macros")
 ;; i launch auto-fill-mode by default to avoid to launch it all the time
-;; (setq-default auto-fill-function 'do-auto-fill)
+(setq-default auto-fill-function 'do-auto-fill)
 ;; use fly spell mode by default
 (define-globalized-minor-mode my-global-flyspell-mode flyspell-mode
   (lambda () (flyspell-mode 1)))
@@ -202,7 +218,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(shrink-path doom-modeline all-the-icons doom-themes visual-fill-column use-package markdown-mode impatient-mode)))
+   '(gnu-elpa-keyring-update lsp-mode shrink-path doom-modeline all-the-icons doom-themes visual-fill-column use-package markdown-mode impatient-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

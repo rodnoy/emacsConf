@@ -24,6 +24,20 @@ like this => ~brew install aspell~
 
 #+end_src
 
+~IMPORTANT~: finally, I've found we should keep only ~add-to-list~
+function with the full path to make it work. So, it should be like
+this:
+
+#+begin_src emacs-lisp
+ (add-to-list 'exec-path "/usr/local/bin/aspell")
+
+  (define-globalized-minor-mode my-global-flyspell-mode
+  flyspell-mode
+    (lambda () (flyspell-mode 1)))
+
+  (my-global-flyspell-mode 1)
+#+end_src 
+
 ** Hide tutorial screen
 
 To hide standard tutorial screen (Welcome *emacs*), just use the line below.
@@ -256,3 +270,27 @@ then aspell lives in ~/usr/local/bin~
   aspell-ru~ or ~apt install aspell-fr~
 
 On ubuntu aspell lives in ~/usr/bin~
+** about elpa, melpa packages
+   I've found that this configuration works on my computer:
+
+#+begin_src emacs-lisp
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("org" . "https://orgmode.org/elpa/")
+                         ("elpa" . "https://elpa.gnu.org/packages/")))
+#+end_src 
+
+to avoid errors, that package was not found and so kind, we should
+update [[https://elpa.gnu.org/packages/gnu-elpa-keyring-update.html][keys]].
+
+#+begin_src emacs-lisp
+  M-x package-install RET gnu-elpa-keyring-update RET
+#+end_src 
+
+And what I've found that, we should add the following before package-initialize:
+
+#+begin_src emacs-lisp
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+#+end_src
+
+
+This is apparently a bug in Emacs for MacOS.
